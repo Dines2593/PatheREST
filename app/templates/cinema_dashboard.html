@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {{ current_user.name }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard - {{ current_user.name }}</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Ajouter un nouveau film</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('cinema_dashboard') }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="title" class="form-label">Titre du film</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="duration" class="form-label">Durée (minutes)</label>
+                            <input type="number" class="form-control" id="duration" name="duration" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="language" class="form-label">Langue</label>
+                            <input type="text" class="form-control" id="language" name="language" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="subtitles" class="form-label">Sous-titres</label>
+                            <input type="text" class="form-control" id="subtitles" name="subtitles">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="director" class="form-label">Réalisateur</label>
+                            <input type="text" class="form-control" id="director" name="director" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="main_actors" class="form-label">Acteurs principaux</label>
+                            <input type="text" class="form-control" id="main_actors" name="main_actors" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="min_age" class="form-label">Âge minimum requis</label>
+                            <input type="number" class="form-control" id="min_age" name="min_age" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    <h5>Programmation</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="start_date" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="end_date" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="screening_days" class="form-label">Jours de projection</label>
+                            <select class="form-select" id="screening_days" name="screening_days" required multiple>
+                                <option value="1">Lundi</option>
+                                <option value="2">Mardi</option>
+                                <option value="3">Mercredi</option>
+                                <option value="4">Jeudi</option>
+                                <option value="5">Vendredi</option>
+                                <option value="6">Samedi</option>
+                                <option value="7">Dimanche</option>
+                            </select>
+                            <small class="form-text text-muted">Maintenez Ctrl pour sélectionner plusieurs jours</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="screening_time" class="form-label">Heure de projection</label>
+                            <input type="time" class="form-control" id="screening_time" name="screening_time" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Ajouter le film</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Films programmés</h5>
+            </div>
+            <div class="card-body">
+                {% if movies %}
+                <div class="list-group">
+                    {% for schedule in movies %}
+                    <div class="list-group-item">
+                        <h6 class="mb-1">{{ schedule.movie.title }}</h6>
+                        <p class="mb-1">
+                            <small>
+                                Du {{ schedule.start_date.strftime('%d/%m/%Y') }} 
+                                au {{ schedule.end_date.strftime('%d/%m/%Y') }}
+                            </small>
+                        </p>
+                        <p class="mb-0">
+                            <small class="text-muted">
+                                Séance à {{ schedule.screening_time.strftime('%H:%M') }}
+                            </small>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">Aucun film programmé pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const screeningDaysSelect = document.getElementById('screening_days');
+    screeningDaysSelect.addEventListener('change', function() {
+        const selectedDays = Array.from(this.selectedOptions)
+            .map(option => option.value)
+            .join(',');
+        this.value = selectedDays;
+    });
+});
+</script>
+{% endblock %}

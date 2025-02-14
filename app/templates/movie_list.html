@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Films à {{ city }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Films à l'affiche à {{ city }}</h1>
+
+    {% if movies %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for movie in movies %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ movie.cinema }}</h6>
+                    
+                    <div class="mb-3">
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt text-danger"></i> 
+                            {{ movie.address }}
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="card-text">
+                            <i class="fas fa-calendar-alt text-primary"></i>
+                            Du {{ movie.start_date }} au {{ movie.end_date }}
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-clock text-success"></i>
+                            Séance à {{ movie.screening_time }}
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="{{ url_for('movie_details', movie_id=movie.id) }}" 
+                           class="btn btn-outline-primary">
+                            Voir les détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        Aucun film n'est actuellement programmé à {{ city }}.
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <p class="text-muted">
+            <i class="fas fa-info-circle"></i>
+            Les horaires sont susceptibles d'être modifiés. Veuillez vérifier auprès des cinémas.
+        </p>
+    </div>
+</div>
+{% endblock %}

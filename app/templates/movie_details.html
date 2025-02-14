@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">{{ movie.title }}</h1>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-clock text-primary"></i> Durée</h5>
+                            <p>{{ movie.duration }} minutes</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-language text-success"></i> Langue</h5>
+                            <p>{{ movie.language }}
+                            {% if movie.subtitles %}
+                                <br><small class="text-muted">Sous-titres : {{ movie.subtitles }}</small>
+                            {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-user-tie text-info"></i> Réalisateur</h5>
+                            <p>{{ movie.director }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-users text-warning"></i> Acteurs principaux</h5>
+                            <p>{{ movie.main_actors }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5><i class="fas fa-exclamation-triangle text-danger"></i> Âge minimum requis</h5>
+                        <p>{{ movie.min_age }} ans</p>
+                    </div>
+
+                    <hr>
+
+                    <h4 class="mb-3">Séances disponibles</h4>
+                    <div class="list-group">
+                        {% for schedule in movie.schedules %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ schedule.cinema_name }}</h5>
+                                <small class="text-muted">{{ schedule.screening_time }}</small>
+                            </div>
+                            <p class="mb-1">
+                                <i class="fas fa-map-marker-alt text-danger"></i>
+                                {{ schedule.address }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-calendar-alt text-primary"></i>
+                                Du {{ schedule.start_date }} au {{ schedule.end_date }}
+                            </p>
+                            <small class="text-muted">
+                                Jours de projection : 
+                                {% set days = {
+                                    '1': 'Lundi',
+                                    '2': 'Mardi',
+                                    '3': 'Mercredi',
+                                    '4': 'Jeudi',
+                                    '5': 'Vendredi',
+                                    '6': 'Samedi',
+                                    '7': 'Dimanche'
+                                } %}
+                                {% for day in schedule.screening_days.split(',') %}
+                                    {{ days[day] }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                {% if movie.schedules and '-' in movie.schedules[0].cinema_name %}
+                    <a href="{{ url_for('movies_by_city', city=movie.schedules[0].cinema_name.split(' - ')[1]) }}" 
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Retour à la liste des films
+                    </a>
+                {% else %}
+                    <p>Informations sur la ville non disponibles.</p>
+                {% endif %}
+            </div>
+
+            <div class="text-center mt-4">
+                {% if movie.schedules %}
+                    <p>Nom du cinéma : {{ movie.schedules[0].cinema_name }}</p>  <!-- Affiche le nom du cinéma pour débogage -->
+                    {% if '-' in movie.schedules[0].cinema_name %}
+                        <a href="{{ url_for('movies_by_city', city=movie.schedules[0].cinema_name.split(' - ')[1]) }}" 
+                           class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste des films
+                        </a>
+                    {% else %}
+                        <p>Le format du nom du cinéma est incorrect. Assurez-vous qu'il suit le format "Cinéma - Ville".</p>
+                    {% endif %}
+                {% else %}
+                    <p>Pas de projections disponibles pour ce film.</p>
+                {% endif %}
+            </div>
+            
+            
+            
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

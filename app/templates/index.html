@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4">Bienvenue sur Cinémas Parisiens</h1>
+    <p class="lead">Découvrez tous les films à l'affiche dans les salles parisiennes</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-film fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Recherche par Ville</h5>
+                <p class="card-text">Trouvez tous les films à l'affiche dans votre ville en un seul clic.</p>
+                <a href="{{ url_for('movies_by_city', city='Paris') }}" class="btn btn-primary">Voir les films à Paris</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar-alt fa-3x mb-3 text-success"></i>
+                <h5 class="card-title">Programmation Détaillée</h5>
+                <p class="card-text">Consultez les horaires, les langues et les informations détaillées de chaque film.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-theater-masks fa-3x mb-3 text-danger"></i>
+                <h5 class="card-title">Espace Cinéma</h5>
+                <p class="card-text">Vous êtes propriétaire d'un cinéma ? Gérez votre programmation en ligne.</p>
+                <a href="{{ url_for('login') }}" class="btn btn-danger">Espace Cinéma</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 p-5 bg-light rounded">
+    <h2 class="text-center mb-4">Comment ça marche ?</h2>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h5 class="mb-1"><i class="fas fa-search me-2"></i> Recherchez par ville</h5>
+                    <p class="mb-1">Sélectionnez votre ville pour voir tous les films disponibles</p>
+                </div>
+                <div class="list-group-item">
+                    <h5 class="mb-1"><i class="fas fa-info-circle me-2"></i> Consultez les détails</h5>
+                    <p class="mb-1">Accédez aux informations complètes sur chaque film</p>
+                </div>
+                <div class="list-group-item">
+                    <h5 class="mb-1"><i class="fas fa-clock me-2"></i> Vérifiez les horaires</h5>
+                    <p class="mb-1">Trouvez la séance qui vous convient le mieux</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
